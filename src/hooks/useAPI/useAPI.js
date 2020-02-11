@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import queryString from "query-string";
-import { Map } from "immutable";
+import { Map, fromJS } from "immutable";
 
 import useData, { getUseDataHookProps } from "../useData";
 
@@ -52,6 +52,15 @@ const defaultProps = {
 };
 
 /**
+ * Checks is the request response is an error
+ *
+ * - This is highly API specific
+ */
+const isResponseError = response => {
+  return response?.status === "error";
+};
+
+/**
  * A general fetcher function
  *
  * - Both `SWR` and `react-async` are built on `fetch`
@@ -61,14 +70,18 @@ const fetcher = async ({ props }) => {
   const { url, version, endpoint } = path;
   const { init, queryParams } = params;
 
-  const encodedQueryParams = Map.isMap(queryParams)
+  const encodedQueryParams = Map.isMap(fromJS(queryParams))
     ? `?${queryString.stringify(queryParams)}`
     : "";
   const pathToResource = `${url}/${version}/${endpoint}${encodedQueryParams}`;
 
+  // TODO: With the second (init) argument fetch is not working
   const response = await fetch(pathToResource);
   console.log("r:", response);
 
+  /**
+   * `response` is standard, not API specific
+   */
   if (!response.ok) throw new Error("Network response was not ok");
 
   return response.json();
@@ -79,12 +92,12 @@ const fetcher = async ({ props }) => {
  */
 const useAPI = props => {
   const { path, params, result } = props;
-  const { data: dataForState, initialData, message, handler } = result;
+  const { data: defaultData, initialData, message, handler } = result;
 
-  const [newResult, setNewResult] = useState({
-    data: dataForState,
+  let ret = {
+    data: defaultData,
     message: message
-  });
+  };
 
   /**
    * This is useData strategy specific ...
@@ -102,10 +115,11 @@ const useAPI = props => {
 
   useEffect(() => {
     console.log("data:", data);
-    //setNewResult(handler(data, error));
+    ret = handler(data, error);
+    console.log("ret:", ret);
   }, [data, error]);
 
-  return newResult;
+  return ret;
 };
 
 useAPI.propTypes = propTypes;

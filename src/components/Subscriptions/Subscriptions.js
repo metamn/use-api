@@ -17,7 +17,12 @@ const propTypes = {
 const defaultProps = {
   apiCall: {
     path: {
-      endpoint: "subscription.php?action=list"
+      endpoint: "subscription.php"
+    },
+    params: {
+      queryParams: {
+        action: "list"
+      }
     },
     result: {
       message: "Loading subscriptions"
@@ -58,13 +63,12 @@ const Subscriptions = props => {
     fromJS(useAPIDefaultProps),
     fromJS(apiCall),
     fromJS({
-      params: { init: { body: JSON.stringify(token) } },
+      params: { init: { body: JSON.stringify({ token: token }) } },
       result: { handler: handler }
     })
   ).toJS();
 
-  const result = useAPI(params);
-  const { data, message } = result;
+  const { data, message } = useAPI(params);
 
   return (
     <div className="Subscriptions">
