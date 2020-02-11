@@ -42,9 +42,8 @@ const defaultProps = {
     queryParams: {}
   },
   result: {
-    data: {},
-    message: "Default message",
     initialData: {},
+    message: "Default message",
     handler: () => {
       console.log("Default result handler");
     }
@@ -95,12 +94,7 @@ const fetcher = async ({ props }) => {
  */
 const useAPI = props => {
   const { path, params, result } = props;
-  const { data: defaultData, initialData, message, handler } = result;
-
-  let ret = {
-    data: defaultData,
-    message: message
-  };
+  const { initialData, message, handler } = result;
 
   /**
    * This is useData strategy specific ...
@@ -116,20 +110,7 @@ const useAPI = props => {
     })
   );
 
-  useEffect(() => {
-    if (error) {
-      console.log("err");
-      ret = {
-        data: defaultData,
-        message: JSON.stringify(error)
-      };
-      console.log("ret:", ret);
-    } else {
-      //ret = handler(data, error);
-    }
-  }, [data, error]);
-
-  return ret;
+  return { data, error };
 };
 
 useAPI.propTypes = propTypes;

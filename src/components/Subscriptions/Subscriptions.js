@@ -35,22 +35,7 @@ const defaultProps = {
  * Handles the result of the API call
  */
 const handler = (data, error) => {
-  if (!(data && data.status)) {
-    const message = error ? JSON.stringify(error) : "Loading ...";
-    return { data: {}, message: message };
-  }
-
-  const plan_id = data.plan_id
-    ? `Plan id: ${data.plan_id}`
-    : "No plan id for this account";
-
-  const message = data.message
-    ? data.message
-    : data.user_message
-    ? data.user_message
-    : "No message from the API";
-
-  return { data: plan_id, message: message };
+  //
 };
 
 /**
@@ -60,10 +45,8 @@ const Subscriptions = props => {
   const { apiCall } = props;
   const token = "Should come from auth";
 
-  const [subscriptions, setSubscriptions] = useState({
-    data: {},
-    message: "Loading subscriptions"
-  });
+  const [subscriptions, setSubscriptions] = useState({});
+  const [message, setMessage] = useState("No message");
 
   const params = mergeDeep(
     fromJS(useAPIDefaultProps),
@@ -74,18 +57,19 @@ const Subscriptions = props => {
     })
   ).toJS();
 
-  const { data, message } = useAPI(params);
+  const { data, error } = useAPI(params);
 
   useEffect(() => {
-    console.log("subscription msg:", message);
-  }, [data, message]);
+    setSubscriptions(data);
+    setMessage(error);
+  }, [data, error]);
 
   return (
     <div className="Subscriptions">
       <h3>Subscriptions</h3>
       <ul>
-        <li>Data: {JSON.stringify(data)}</li>
-        <li>Message: {message}</li>
+        <li>Subscriptions: {JSON.stringify(subscriptions)}</li>
+        <li>Message: {JSON.stringify(error)}</li>
       </ul>
     </div>
   );
