@@ -26,6 +26,28 @@ const defaultProps = {
 };
 
 /**
+ * Handles the result of the API call
+ */
+const handler = (data, error) => {
+  if (!(data && data.status)) {
+    const message = error ? JSON.stringify(error) : "Loading ...";
+    return { data: {}, message: message };
+  }
+
+  const plan_id = data.plan_id
+    ? `Plan id: ${data.plan_id}`
+    : "No plan id for this account";
+
+  const message = data.message
+    ? data.message
+    : data.user_message
+    ? data.user_message
+    : "No message from the API";
+
+  return { data: plan_id, message: message };
+};
+
+/**
  * Displays the component
  */
 const Subscriptions = props => {
@@ -34,7 +56,8 @@ const Subscriptions = props => {
 
   const result = useAPI({
     ...apiCall,
-    params: { init: { body: JSON.stringify(token) } }
+    params: { init: { body: JSON.stringify(token) } },
+    result: { handler: handler }
   });
 
   const { data, message } = result;
@@ -43,7 +66,7 @@ const Subscriptions = props => {
     <div className="Subscriptions">
       <h3>Subscriptions</h3>
       <ul>
-        <li>Data: {data}</li>
+        <li>Data: {JSON.stringify(data)}</li>
         <li>Message: {message}</li>
       </ul>
     </div>
