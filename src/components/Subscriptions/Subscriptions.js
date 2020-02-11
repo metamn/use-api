@@ -48,8 +48,7 @@ const Subscriptions = props => {
     fromJS(useAPIDefaultProps),
     fromJS(apiCall),
     fromJS({
-      params: { init: { body: JSON.stringify({ token: token }) } },
-      result: { handler: handler }
+      params: { init: { body: JSON.stringify({ token: token }) } }
     })
   ).toJS();
 
