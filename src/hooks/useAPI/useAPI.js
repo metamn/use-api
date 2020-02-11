@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import queryString from "query-string";
 
-import useData, { useDataPropTypes, getUseDataHookProps } from "../useData";
+import useData, { getUseDataHookProps } from "../useData";
 
 /**
  * Defines the prop types
@@ -18,6 +18,12 @@ const propTypes = {
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     init: PropTypes.object,
     queryParams: PropTypes.object
+  }),
+  result: PropTypes.shape({
+    data: PropTypes.object,
+    initialData: PropTypes.object,
+    message: PropTypes.string,
+    handler: PropTypes.func
   })
 };
 
@@ -33,13 +39,25 @@ const defaultProps = {
   params: {
     init: {},
     queryParams: {}
+  },
+  result: {
+    data: {},
+    initialData: {},
+    message: "Default message",
+    handler: () => {
+      console.log("Default result handler");
+    }
   }
 };
 
 /**
- * The API specific fetcher function
+ * A general fetcher function
+ *
+ * - Both `SWR` and `react-async` are built on `fetch`
  */
-const fetcher = async ({ params }) => {
+const fetcher = async ({ props }) => {
+  const { path, params } = props;
+  const { url, version, endpoint } = path;
   const { init, queryParams } = params;
 
   const encodedQueryParams = queryParams
@@ -49,8 +67,7 @@ const fetcher = async ({ params }) => {
 
   const response = await fetch(pathToResource, init);
 
-  if (response && response.status === "error")
-    throw new Error(`Error: ${response}`);
+  if (!response.ok) throw new Error("Network response was not ok");
 
   return response.json();
 };
@@ -59,13 +76,30 @@ const fetcher = async ({ params }) => {
  * Displays the component
  */
 const useAPI = props => {
-  const [result, setResult] = useState(null);
+  const { path, params, result } = props;
+  const { data, initialData, message, handler } = result;
 
-  const { data, error } = useData(props);
+  const [newResult, setNewResult] = useState({ data: data, message: message });
 
-  useEffect(() => {}, [data, error]);
+  /**
+   * This is useData strategy specific ...
+   * // TODO: Make it strategy independent
+   */
+  const { data, error } = useData(
+    getUseDataHookProps({
+      options: {
+        promiseFn: fetcher,
+        promiseFnParams: { path: path, params: params },
+        initialValue: initialData
+      }
+    })
+  );
 
-  return result;
+  useEffect(() => {
+    setNewResult(handler(data, error));
+  }, [data, error]);
+
+  return newResult;
 };
 
 useAPI.propTypes = propTypes;
