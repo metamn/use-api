@@ -88,9 +88,10 @@ const fetcher = async ({ props }) => {
   const response = await fetch(pathToResource);
 
   /**
-   * With this API we just simply return the response
-   * The response always includes the errors, if there is any
+   * With this API (Finster) we just simply return the response
+   * The response always includes the errors, if there are any
    * No need to complicate with throwing errors here
+   * When error is used the components can enter in infinite rendering because their state gets updated continuously
    */
   return response.json();
 };

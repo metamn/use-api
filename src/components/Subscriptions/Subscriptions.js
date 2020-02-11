@@ -40,7 +40,7 @@ const Subscriptions = props => {
   const { apiCall } = props;
   const token = "Should come from auth";
 
-  const [subscriptions, setSubscriptions] = useState({});
+  const [results, setResults] = useState({});
   const [message, setMessage] = useState("No message");
 
   const params = mergeApiParams({
@@ -56,7 +56,7 @@ const Subscriptions = props => {
     if (isApiError(data)) {
       setMessage(getApiErrorMessage(data));
     } else {
-      setSubscriptions(data);
+      setResults(data);
       setMessage("API request was successful");
     }
   }, [data]);
@@ -65,7 +65,7 @@ const Subscriptions = props => {
     <div className="Subscriptions">
       <h3>Subscriptions</h3>
       <ul>
-        <li>Subscriptions: {JSON.stringify(subscriptions)}</li>
+        <li>Subscriptions: {JSON.stringify(results)}</li>
         <li>Message: {JSON.stringify(message)}</li>
       </ul>
     </div>
