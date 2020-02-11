@@ -42,8 +42,8 @@ const defaultProps = {
   },
   result: {
     data: {},
-    initialData: {},
     message: "Default message",
+    initialData: {},
     handler: () => {
       console.log("Default result handler");
     }
@@ -77,9 +77,12 @@ const fetcher = async ({ props }) => {
  */
 const useAPI = props => {
   const { path, params, result } = props;
-  const { data, initialData, message, handler } = result;
+  const { data: dataForState, initialData, message, handler } = result;
 
-  const [newResult, setNewResult] = useState({ data: data, message: message });
+  const [newResult, setNewResult] = useState({
+    data: dataForState,
+    message: message
+  });
 
   /**
    * This is useData strategy specific ...

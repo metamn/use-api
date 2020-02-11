@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import Login from "./components/Login";
+import Subscriptions from "./components/Subscriptions";
 
 const App = () => {
   return (
@@ -13,10 +14,16 @@ const App = () => {
         <li>
           <Link to="/login">Login</Link>
         </li>
+        <li>
+          <Link to="/subscriptions">Subscriptions</Link>
+        </li>
       </ul>
       <Switch>
         <Route path="/login">
           <Login />
+        </Route>
+        <Route path="/subscriptions">
+          <Subscriptions />
         </Route>
         <Route path="/">Home</Route>
       </Switch>
