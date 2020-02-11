@@ -23,22 +23,24 @@ const propTypes = {
 const defaultProps = {
   apiCall: {
     path: {
-      endpoint: "login"
+      endpoint: "register"
     },
     params: {
       queryParams: {
-        email: "p.schinkel+5@vacat.nl",
-        password: "test123"
+        name: "test2",
+        email: "test2@test.com",
+        password: "test12345",
+        recaptcha_ignore: "293kwlxh"
       }
     },
-    defaultData: "Logging in ..."
+    defaultData: "Registering ..."
   }
 };
 
 /**
  * Displays the component
  */
-const Login = props => {
+const Register = props => {
   const { apiCall } = props;
 
   const [results, setResults] = useState({});
@@ -57,18 +59,18 @@ const Login = props => {
   }, [data]);
 
   return (
-    <div className="Login">
-      <h3>Login</h3>
+    <div className="Register">
+      <h3>Register</h3>
       <ul>
-        <li>Login: {JSON.stringify(results)}</li>
+        <li>Register: {JSON.stringify(results)}</li>
         <li>Message: {JSON.stringify(message)}</li>
       </ul>
     </div>
   );
 };
 
-Login.propTypes = propTypes;
-Login.defaultProps = defaultProps;
+Register.propTypes = propTypes;
+Register.defaultProps = defaultProps;
 
-export default Login;
-export { propTypes as LoginPropTypes, defaultProps as LoginDefaultProps };
+export default Register;
+export { propTypes as RegisterPropTypes, defaultProps as RegisterDefaultProps };
