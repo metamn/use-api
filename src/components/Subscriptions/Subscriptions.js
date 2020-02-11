@@ -57,19 +57,19 @@ const Subscriptions = props => {
     })
   ).toJS();
 
-  const { data, error } = useAPI(params);
+  const { data } = useAPI(params);
 
   useEffect(() => {
     setSubscriptions(data);
-    setMessage(error);
-  }, [data, error]);
+    setMessage("Ola!");
+  }, [data]);
 
   return (
     <div className="Subscriptions">
       <h3>Subscriptions</h3>
       <ul>
         <li>Subscriptions: {JSON.stringify(subscriptions)}</li>
-        <li>Message: {JSON.stringify(error)}</li>
+        <li>Message: {JSON.stringify(message)}</li>
       </ul>
     </div>
   );

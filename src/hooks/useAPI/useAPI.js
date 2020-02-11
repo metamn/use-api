@@ -20,12 +20,7 @@ const propTypes = {
     init: PropTypes.object,
     queryParams: PropTypes.object
   }),
-  result: PropTypes.shape({
-    data: PropTypes.object,
-    initialData: PropTypes.object,
-    message: PropTypes.string,
-    handler: PropTypes.func
-  })
+  defaultData: PropTypes.any
 };
 
 /**
@@ -41,13 +36,7 @@ const defaultProps = {
     init: {},
     queryParams: {}
   },
-  result: {
-    initialData: {},
-    message: "Default message",
-    handler: () => {
-      console.log("Default result handler");
-    }
-  }
+  defaultData: "Loading ..."
 };
 
 /**
@@ -78,14 +67,10 @@ const fetcher = async ({ props }) => {
   const response = await fetch(pathToResource);
 
   /**
-   * - `response` is standard, not API specific
-   * - the error thrown can be catched in the `error` result of `useData` (THIS IS NOT SURE)
-  if (!response.ok)
-    throw new Error(
-      `Network response was not ok (${response.status} - ${response.statusText} error).`
-    );
-*/
-
+   * With this API we just simply return the response
+   * The response always includes the errors, if any
+   * No need to complicate with throwing errors here
+   */
   return response.json();
 };
 
@@ -93,14 +78,13 @@ const fetcher = async ({ props }) => {
  * Displays the component
  */
 const useAPI = props => {
-  const { path, params, result } = props;
-  const { initialData, message, handler } = result;
+  const { path, params, initialData } = props;
 
   /**
    * This is useData strategy specific ...
    * // TODO: Make it strategy independent
    */
-  const { data, error } = useData(
+  const { data } = useData(
     getUseDataHookProps({
       options: {
         promiseFn: fetcher,
@@ -110,7 +94,7 @@ const useAPI = props => {
     })
   );
 
-  return { data, error };
+  return { data };
 };
 
 useAPI.propTypes = propTypes;
