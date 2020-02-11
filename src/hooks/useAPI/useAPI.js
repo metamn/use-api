@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import queryString from "query-string";
+import { Map } from "immutable";
 
 import useData, { getUseDataHookProps } from "../useData";
 
@@ -60,12 +61,13 @@ const fetcher = async ({ props }) => {
   const { url, version, endpoint } = path;
   const { init, queryParams } = params;
 
-  const encodedQueryParams = queryParams
+  const encodedQueryParams = Map.isMap(queryParams)
     ? `?${queryString.stringify(queryParams)}`
     : "";
   const pathToResource = `${url}/${version}/${endpoint}${encodedQueryParams}`;
 
-  const response = await fetch(pathToResource, init);
+  const response = await fetch(pathToResource);
+  console.log("r:", response);
 
   if (!response.ok) throw new Error("Network response was not ok");
 
@@ -76,7 +78,6 @@ const fetcher = async ({ props }) => {
  * Displays the component
  */
 const useAPI = props => {
-  console.log("u:", props);
   const { path, params, result } = props;
   const { data: dataForState, initialData, message, handler } = result;
 
@@ -93,14 +94,15 @@ const useAPI = props => {
     getUseDataHookProps({
       options: {
         promiseFn: fetcher,
-        promiseFnParams: { path: path, params: params },
+        promiseFnParams: { props: { path: path, params: params } },
         initialValue: initialData
       }
     })
   );
 
   useEffect(() => {
-    setNewResult(handler(data, error));
+    console.log("data:", data);
+    //setNewResult(handler(data, error));
   }, [data, error]);
 
   return newResult;

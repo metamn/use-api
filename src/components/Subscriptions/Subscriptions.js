@@ -63,10 +63,7 @@ const Subscriptions = props => {
     })
   ).toJS();
 
-  console.log("pa:", params);
-
-  //const result = useAPI(params);
-  const { result } = useAPIDefaultProps;
+  const result = useAPI(params);
   const { data, message } = result;
 
   return (
