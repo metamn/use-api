@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { fromJS, mergeDeep } from "immutable";
 
@@ -25,6 +25,7 @@ const defaultProps = {
       }
     },
     result: {
+      data: {},
       message: "Loading subscriptions"
     }
   }
@@ -59,6 +60,11 @@ const Subscriptions = props => {
   const { apiCall } = props;
   const token = "Should come from auth";
 
+  const [subscriptions, setSubscriptions] = useState({
+    data: {},
+    message: "Loading subscriptions"
+  });
+
   const params = mergeDeep(
     fromJS(useAPIDefaultProps),
     fromJS(apiCall),
@@ -69,6 +75,10 @@ const Subscriptions = props => {
   ).toJS();
 
   const { data, message } = useAPI(params);
+
+  useEffect(() => {
+    console.log("subscription msg:", message);
+  }, [data, message]);
 
   return (
     <div className="Subscriptions">

@@ -75,14 +75,17 @@ const fetcher = async ({ props }) => {
     : "";
   const pathToResource = `${url}/${version}/${endpoint}${encodedQueryParams}`;
 
-  // TODO: With the second (init) argument fetch is not working
+  // TODO: With the second argument (init) fetch is not working
   const response = await fetch(pathToResource);
-  console.log("r:", response);
 
   /**
-   * `response` is standard, not API specific
-   */
-  if (!response.ok) throw new Error("Network response was not ok");
+   * - `response` is standard, not API specific
+   * - the error thrown can be catched in the `error` result of `useData` (THIS IS NOT SURE)
+  if (!response.ok)
+    throw new Error(
+      `Network response was not ok (${response.status} - ${response.statusText} error).`
+    );
+*/
 
   return response.json();
 };
@@ -114,9 +117,16 @@ const useAPI = props => {
   );
 
   useEffect(() => {
-    console.log("data:", data);
-    ret = handler(data, error);
-    console.log("ret:", ret);
+    if (error) {
+      console.log("err");
+      ret = {
+        data: defaultData,
+        message: JSON.stringify(error)
+      };
+      console.log("ret:", ret);
+    } else {
+      //ret = handler(data, error);
+    }
   }, [data, error]);
 
   return ret;
