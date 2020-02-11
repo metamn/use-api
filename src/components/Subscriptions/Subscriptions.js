@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { fromJS, mergeDeep } from "immutable";
 
 import { useAPI, useAPIPropTypes, useAPIDefaultProps } from "../../hooks";
 
@@ -15,7 +16,6 @@ const propTypes = {
  */
 const defaultProps = {
   apiCall: {
-    ...useAPIDefaultProps,
     path: {
       endpoint: "subscription.php?action=list"
     },
@@ -54,12 +54,19 @@ const Subscriptions = props => {
   const { apiCall } = props;
   const token = "Should come from auth";
 
-  const result = useAPI({
-    ...apiCall,
-    params: { init: { body: JSON.stringify(token) } },
-    result: { handler: handler }
-  });
+  const params = mergeDeep(
+    fromJS(useAPIDefaultProps),
+    fromJS(apiCall),
+    fromJS({
+      params: { init: { body: JSON.stringify(token) } },
+      result: { handler: handler }
+    })
+  ).toJS();
 
+  console.log("pa:", params);
+
+  //const result = useAPI(params);
+  const { result } = useAPIDefaultProps;
   const { data, message } = result;
 
   return (

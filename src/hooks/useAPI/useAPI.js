@@ -76,6 +76,7 @@ const fetcher = async ({ props }) => {
  * Displays the component
  */
 const useAPI = props => {
+  console.log("u:", props);
   const { path, params, result } = props;
   const { data: dataForState, initialData, message, handler } = result;
 
