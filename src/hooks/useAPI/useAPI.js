@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import queryString from "query-string";
 import { Map, fromJS, mergeDeep } from "immutable";
@@ -90,7 +89,7 @@ const fetcher = async ({ props }) => {
 
   /**
    * With this API we just simply return the response
-   * The response always includes the errors, if any
+   * The response always includes the errors, if there is any
    * No need to complicate with throwing errors here
    */
   return response.json();

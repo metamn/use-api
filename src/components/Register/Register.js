@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import {
   useAPI,
   useAPIPropTypes,
-  useAPIDefaultProps,
   isApiError,
   getApiErrorMessage,
   mergeApiParams

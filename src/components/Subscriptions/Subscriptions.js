@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { fromJS, mergeDeep } from "immutable";
 
 import {
   useAPI,
   useAPIPropTypes,
-  useAPIDefaultProps,
   isApiError,
   getApiErrorMessage,
   mergeApiParams
