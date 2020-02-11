@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import queryString from "query-string";
+
+import useData, { useDataPropTypes, getUseDataHookProps } from "../useData";
 
 /**
  * Defines the prop types
  */
 const propTypes = {
-  url: PropTypes.string,
-  version: PropTypes.string,
-  endpoint: PropTypes.string,
-  fetchParams: PropTypes.shape({
+  path: PropTypes.shape({
+    url: PropTypes.string,
+    version: PropTypes.string,
+    endpoint: PropTypes.string
+  }),
+  params: PropTypes.shape({
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     init: PropTypes.object,
@@ -21,10 +25,12 @@ const propTypes = {
  * Defines the default props
  */
 const defaultProps = {
-  url: "http://api.finsterdata.com",
-  version: "v1",
-  endpoint: "login",
-  fetchParams: {
+  path: {
+    url: "http://api.finsterdata.com",
+    version: "v1",
+    endpoint: "login"
+  },
+  params: {
     init: {},
     queryParams: {}
   }
@@ -33,8 +39,8 @@ const defaultProps = {
 /**
  * The API specific fetcher function
  */
-const fetcher = async ({ fetchParams }) => {
-  const { init, queryParams } = fetchParams;
+const fetcher = async ({ params }) => {
+  const { init, queryParams } = params;
 
   const encodedQueryParams = queryParams
     ? `?${queryString.stringify(queryParams)}`
@@ -53,7 +59,13 @@ const fetcher = async ({ fetchParams }) => {
  * Displays the component
  */
 const useAPI = props => {
-  return <div className="useAPI">useAPI</div>;
+  const [result, setResult] = useState(null);
+
+  const { data, error } = useData(props);
+
+  useEffect(() => {}, [data, error]);
+
+  return result;
 };
 
 useAPI.propTypes = propTypes;
