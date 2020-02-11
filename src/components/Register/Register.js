@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { fromJS, mergeDeep } from "immutable";
 
 import {
   useAPI,
   useAPIPropTypes,
   useAPIDefaultProps,
   isApiError,
-  getApiErrorMessage
+  getApiErrorMessage,
+  mergeApiParams
 } from "../../hooks";
 
 /**
@@ -46,7 +46,7 @@ const Register = props => {
   const [results, setResults] = useState({});
   const [message, setMessage] = useState("No message");
 
-  const params = mergeDeep(fromJS(useAPIDefaultProps), fromJS(apiCall)).toJS();
+  const params = mergeApiParams({ requestProps: apiCall });
   const { data } = useAPI(params);
 
   useEffect(() => {

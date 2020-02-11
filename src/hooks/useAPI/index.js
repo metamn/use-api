@@ -3,5 +3,6 @@ export {
   useAPIPropTypes,
   useAPIDefaultProps,
   isApiError,
-  getApiErrorMessage
+  getApiErrorMessage,
+  mergeApiParams
 } from "./useAPI";

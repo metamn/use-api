@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import queryString from "query-string";
-import { Map, fromJS } from "immutable";
+import { Map, fromJS, mergeDeep } from "immutable";
 
 import useData, { getUseDataHookProps } from "../useData";
 
@@ -41,8 +41,6 @@ const defaultProps = {
 
 /**
  * Checks if the response is an error
- *
- * - This is highly API specific
  */
 const isApiError = data => {
   return data?.status === "error";
@@ -51,10 +49,25 @@ const isApiError = data => {
 /**
  * Returns the error message from the response
  *
- * - This is highly API specific
  */
 const getApiErrorMessage = data => {
   return data?.user_message;
+};
+
+/**
+ * Deep merges various API props to form the final params
+ *
+ * - requestProps - the request specific props, usually defined in the caller component's PropTypes
+ * - requestLiveProps - the request specific props which, defined inside the component
+ */
+const mergeApiParams = props => {
+  const { requestProps, requestLiveProps } = props;
+
+  return mergeDeep(
+    fromJS(defaultProps),
+    fromJS(requestProps),
+    fromJS(requestLiveProps)
+  ).toJS();
 };
 
 /**
@@ -113,6 +126,7 @@ export default useAPI;
 export {
   isApiError,
   getApiErrorMessage,
+  mergeApiParams,
   propTypes as useAPIPropTypes,
   defaultProps as useAPIDefaultProps
 };

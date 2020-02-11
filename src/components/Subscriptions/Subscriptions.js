@@ -7,7 +7,8 @@ import {
   useAPIPropTypes,
   useAPIDefaultProps,
   isApiError,
-  getApiErrorMessage
+  getApiErrorMessage,
+  mergeApiParams
 } from "../../hooks";
 
 /**
@@ -44,14 +45,12 @@ const Subscriptions = props => {
   const [subscriptions, setSubscriptions] = useState({});
   const [message, setMessage] = useState("No message");
 
-  const params = mergeDeep(
-    fromJS(useAPIDefaultProps),
-    fromJS(apiCall),
-    fromJS({
+  const params = mergeApiParams({
+    requestProps: apiCall,
+    requestLiveProps: {
       params: { init: { body: JSON.stringify({ token: token }) } }
-    })
-  ).toJS();
-
+    }
+  });
   const { data } = useAPI(params);
 
   useEffect(() => {
