@@ -49,6 +49,7 @@ const Subscriptions = props => {
       params: { init: { body: JSON.stringify({ token: token }) } }
     }
   });
+
   const { data } = useAPI(params);
 
   useEffect(() => {
