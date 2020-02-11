@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { fromJS, mergeDeep } from "immutable";
 
-import { useAPI, useAPIPropTypes, useAPIDefaultProps } from "../../hooks";
+import {
+  useAPI,
+  useAPIPropTypes,
+  useAPIDefaultProps,
+  isApiError,
+  getApiErrorMessage
+} from "../../hooks";
 
 /**
  * Defines the prop types
@@ -24,18 +30,8 @@ const defaultProps = {
         action: "list"
       }
     },
-    result: {
-      data: {},
-      message: "Loading subscriptions"
-    }
+    defaultData: "Loading subscriptions"
   }
-};
-
-/**
- * Handles the result of the API call
- */
-const handler = (data, error) => {
-  //
 };
 
 /**
@@ -60,8 +56,12 @@ const Subscriptions = props => {
   const { data } = useAPI(params);
 
   useEffect(() => {
-    setSubscriptions(data);
-    setMessage("Ola!");
+    if (isApiError(data)) {
+      setMessage(getApiErrorMessage(data));
+    } else {
+      setSubscriptions(data);
+      setMessage("API request was successful");
+    }
   }, [data]);
 
   return (

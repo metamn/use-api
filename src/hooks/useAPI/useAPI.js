@@ -40,12 +40,21 @@ const defaultProps = {
 };
 
 /**
- * Checks is the request response is an error
+ * Checks if the response is an error
  *
  * - This is highly API specific
  */
-const isResponseError = response => {
-  return response?.status === "error";
+const isApiError = data => {
+  return data?.status === "error";
+};
+
+/**
+ * Returns the error message from the response
+ *
+ * - This is highly API specific
+ */
+const getApiErrorMessage = data => {
+  return data?.user_message;
 };
 
 /**
@@ -101,4 +110,9 @@ useAPI.propTypes = propTypes;
 useAPI.defaultProps = defaultProps;
 
 export default useAPI;
-export { propTypes as useAPIPropTypes, defaultProps as useAPIDefaultProps };
+export {
+  isApiError,
+  getApiErrorMessage,
+  propTypes as useAPIPropTypes,
+  defaultProps as useAPIDefaultProps
+};

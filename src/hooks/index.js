@@ -6,5 +6,7 @@ export {
 export {
   default as useAPI,
   useAPIPropTypes,
-  useAPIDefaultProps
+  useAPIDefaultProps,
+  isApiError,
+  getApiErrorMessage
 } from "./useAPI";

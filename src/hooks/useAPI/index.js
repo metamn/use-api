@@ -1,1 +1,7 @@
-export { default, useAPIPropTypes, useAPIDefaultProps } from "./useAPI";
+export {
+  default,
+  useAPIPropTypes,
+  useAPIDefaultProps,
+  isApiError,
+  getApiErrorMessage
+} from "./useAPI";
