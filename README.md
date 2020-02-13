@@ -67,8 +67,8 @@ const Categories = props => {
 
 Done in a few more steps:
 
-1. Set up the call with data loader library specific params
-2. Extend the data loader library with an API specific fetcher
+1. Extend the data loader library with an API specific fetcher.
+2. Set up the call with data loader library specific params
 3. Do the call
 4. Parse the results:
    - Parse the status part of the result
@@ -85,6 +85,9 @@ const fetcherLogin = async ({ user }) => {
 
   const response = await fetch(`http://api.xxxx.com/v1/login?${encodedParams}`);
 
+  /**
+   * Parse the status part of the result.
+   */
   if (response && response.status === "error")
     throw new Error(`Error: ${response}`);
 
@@ -108,7 +111,7 @@ const { data, error, timestamp } = useData(options);
 
 /**
  * Special parsing of the `data` part of the `response`
- * - The `status` part of the `response` has to be also parsed, it is done elsewhere
+ * - The shape of the data is unknown
  */
 const authenticated = data.status === "ok";
 const token = data.token ? data.token : "";
@@ -120,7 +123,7 @@ Done - again - in a few easy steps:
 
 1. Setup the call
 2. Do the call
-3. Parse the results: the data received will follow the shape of the setup
+3. Parse the results with some smart, API specific helpers
 
 ```js
 // with `use-api` REST API calls become simple again
