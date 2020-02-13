@@ -1,3 +1,7 @@
+/**
+ * React hook to handle a REST API
+ */
+
 import PropTypes from "prop-types";
 import queryString from "query-string";
 import { Map, fromJS, mergeDeep } from "immutable";
@@ -39,6 +43,11 @@ const defaultProps = {
 };
 
 /**
+ * API specific functions
+ * - They should be replaced / overwritten for every API
+ */
+
+/**
  * Checks if the response is an error
  */
 const isApiError = data => {
@@ -52,6 +61,12 @@ const isApiError = data => {
 const getApiErrorMessage = data => {
   return data?.user_message;
 };
+
+/**
+ * General functions
+ * - They should work with all REST APIs
+ * - API specific parts of the code are marked with comments
+ */
 
 /**
  * Deep merges various API props to form the final params
